@@ -1,0 +1,40 @@
+
+
+import java.util.LinkedList;
+
+public class Population {
+
+	private LinkedList<Member> members;
+
+	public Population(int size, int puzz, LinkedList<String> vals, int goal) {
+		members = new LinkedList<Member>();
+
+		// make the list of members
+		// TODO finish member gen for each puzzle
+		for (int i = 0; i < size; i++) {
+			Member newMember;
+			switch (puzz) {
+			case 1:
+				newMember = new MemberPuzz1(vals, goal);
+				break;
+			case 2:
+				newMember = new MemberPuzz2(vals);
+				break;
+			case 3:
+				newMember = new MemberPuzz3(vals,true);
+				break;
+			default:
+				// print an error then quit, this shouldn't ever happen
+				newMember = null;
+				System.out.println("You didn't input a puzzle number between 1 and 3. Please do that");
+				System.exit(0);
+				break;
+			}
+
+			members.add(newMember);
+
+		}
+	}
+	
+
+}

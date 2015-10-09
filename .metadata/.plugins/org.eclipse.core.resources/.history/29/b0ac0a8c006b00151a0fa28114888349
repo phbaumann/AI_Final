@@ -1,0 +1,39 @@
+import java.util.concurrent.ThreadLocalRandom;
+
+public class Algorithm {
+	// Initializing variables
+	private static final int GENSIZE = 100;
+	
+	// make a new population with only the members selected for crossover
+	// choose top 50 of pop1 and top 50 of pop2 using merge sort
+	public static Population parentSelection(Population pop1, Population pop2) {
+
+		Member[] fits1 = new Member[GENSIZE];
+		Member[] fits2 = new Member[GENSIZE];
+		
+		// add the top 50 parents and top 50 children to the new pop
+		Population newPop = new Population();
+		for (int i = 0; i < GENSIZE; i++) {
+			newPop.saveMember(pop1.getMember(i));
+			newPop.saveMember(pop2.getMember(i));
+		}
+		
+
+		return newPop;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	// Getters and setters
+	public static int getGenSize() {
+		return GENSIZE;
+	}
+}

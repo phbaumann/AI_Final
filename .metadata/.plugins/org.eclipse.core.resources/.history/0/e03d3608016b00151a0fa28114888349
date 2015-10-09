@@ -1,0 +1,82 @@
+import java.util.concurrent.ThreadLocalRandom;
+
+public class Algorithm {
+	// Initializing variables
+	private static final int GENSIZE = 100;
+	
+	// make a new population with only the members selected for crossover
+	// choose top 50 of pop1 and top 50 of pop2 using merge sort
+	public static Population parentSelection(Population pop1, Population pop2) {
+
+		Member[] fits1 = new Member[GENSIZE];
+		Member[] fits2 = new Member[GENSIZE];
+		
+		// makes a new population using crossover function
+		public static Population makeBabies(Population pop) {
+			Population newPop = new Population();
+
+			Member mem1;
+			Member mem2;
+		
+			for (int i = 0; i < GENSIZE; i++) {
+				int rand = ThreadLocalRandom.current().nextInt(0, pop.getSize());
+				int rand2 = ThreadLocalRandom.current().nextInt(0, pop.getSize());
+				// use each member five times
+				if(i < GENSIZE){
+					mem1 = pop.getMember(i);
+				}
+				else{
+					mem1 = pop.getMember(rand);
+				}
+
+				
+				// for each of the five times, choose random partner
+				mem2 = pop.getMember(rand2);
+
+				// make the babies! and add them to the new population
+				Member newMem = null;
+				// use a different crossover or each puzzle
+				switch (PUZZNUM) {
+				case 1:
+					newMem = crossover1(mem1, mem2);
+					break;
+				case 2:
+					newMem = crossover2(mem1, mem2);
+					break;
+				case 3:
+					newMem = crossover3(mem1, mem2);
+					break;
+				default:
+					System.out.println("You puzzle number is invalid");
+					System.exit(0);
+				}
+
+				if (newMem != null) {
+					newPop.saveMember(newMem);
+				} else {
+					System.out.println("crossover didn't create a new member");
+					System.exit(0);
+				}
+			}
+
+			return newPop;
+		}
+
+		return newPop;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	// Getters and setters
+	public static int getGenSize() {
+		return GENSIZE;
+	}
+}

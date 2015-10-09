@@ -1,0 +1,52 @@
+
+
+import java.util.LinkedList;
+import java.util.concurrent.ThreadLocalRandom;
+
+public class Algorithm_OLD {
+
+	//this should always be divisible by 5
+	private static final int GENSIZE = 48;
+	private static final int PREFSIZE = GENSIZE/3;
+	private static int PUZZNUM;
+	static int mutRand = 0;
+
+	public Algorithm_OLD(int puzz) {
+		PUZZNUM = puzz;
+	}
+
+	public static int getGenSize() {
+		return GENSIZE;
+	}
+	
+	public static void setPuzz(int puzz){
+		PUZZNUM = puzz;
+	}
+
+	
+
+	
+	private static Member mutation1(Member mem) {
+		Member mut = mem;
+		
+		return mut;
+	}
+	
+	private static Member mutation3(Member mem) {
+		Member mut = mem;
+		
+		return mut;
+	}
+	
+	private static Member mutation2(Member mem) {
+		Member mut = mem;
+		
+		return mut;
+	}
+	
+	// add random genes into the population
+	// TODO make this
+	public Population_OLD mutate(Population_OLD pop) {
+		return new Population_OLD();
+	}
+}

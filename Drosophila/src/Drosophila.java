@@ -1,0 +1,26 @@
+
+public class Drosophila {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		Population parents = new Population(100);
+		int leng = 10;
+		int i = 0;
+		
+		Member best = parents.getFittest();
+		
+		while(i < leng){
+			Population children = Algorithm.makeBabies(parents);
+			if(children.getFittest().getFitness() > best.getFitness()){
+				best = children.getFittest();
+			}
+			i++;
+		}
+		
+		System.out.println("The best:\n");
+		System.out.println(best);
+
+	}
+
+}

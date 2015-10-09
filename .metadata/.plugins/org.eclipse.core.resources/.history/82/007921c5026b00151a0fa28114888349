@@ -1,0 +1,23 @@
+
+import java.util.LinkedList;
+
+public class Population {
+
+	private LinkedList<Member> members;
+
+	public Population(int size, int puzz, LinkedList<String> vals, int goal) {
+		members = new LinkedList<Member>();
+
+		// make the list of members
+		for (int i = 0; i < size; i++) {
+			Member newMember = new Member();
+			members.add(newMember);
+		}
+	}
+	
+	// second constructor for non-initial populations
+	public Population() {
+		this.members = new LinkedList<Member>();
+	}
+
+}

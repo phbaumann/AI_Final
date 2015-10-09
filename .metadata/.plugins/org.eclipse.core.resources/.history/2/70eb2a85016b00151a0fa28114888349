@@ -1,0 +1,60 @@
+import java.util.concurrent.ThreadLocalRandom;
+
+public class Algorithm {
+	// Initializing variables
+	private static final int GENSIZE = 100;
+	
+	// make a new population
+	public static Population parentSelection(Population pop1, Population pop2) {
+
+		Member[] fits1 = new Member[GENSIZE];
+		Member[] fits2 = new Member[GENSIZE];
+		
+		Population parentPop = new Population();
+		
+		return parentPop;
+	}
+		
+		// makes a new population using crossover function
+		public static Population makeBabies(Population pop) {
+			Population newPop = new Population();
+
+			Member mem1;
+			Member mem2;
+		
+			for (int i = 0; i < GENSIZE; i++) {
+				int rand = ThreadLocalRandom.current().nextInt(0, pop.getSize());
+				int rand2 = ThreadLocalRandom.current().nextInt(0, pop.getSize());
+
+					mem1 = pop.getMember(rand);
+					mem2 = pop.getMember(rand2);
+
+				// make the babies! and add them to the new population
+				Member newMem = null;
+				newMem = crossover(mem1, mem2);
+
+				if (newMem != null) {
+					newPop.saveMember(newMem);
+				} else {
+					System.out.println("crossover didn't create a new member");
+					System.exit(0);
+				}
+			}
+
+			return newPop;
+		}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	// Getters and setters
+	public static int getGenSize() {
+		return GENSIZE;
+	}
+}

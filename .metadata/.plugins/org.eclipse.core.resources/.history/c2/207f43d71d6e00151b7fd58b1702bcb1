@@ -1,0 +1,100 @@
+
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.concurrent.ThreadLocalRandom;
+
+public class Member {
+
+	//genes 01 - eye color
+	//genes 23 - body color
+	//genes 45 - wings
+	//genes 6 - sex
+	private Boolean[] genes;
+	private final int GENE_SIZE = 7;
+
+
+	// constructor for new members
+	public Member() {
+
+		genes = new Boolean[GENE_SIZE];
+
+		// init the genes array to all false
+		Arrays.fill(genes, Boolean.FALSE);
+
+		// create the gene a random gene sequence for this member using the
+		// possible values
+		generateGenes();
+	}
+
+
+	// get the fitness of the individual
+	// for puzzle 1, the fitness is the sum of the numbers
+	public int getFitness() {
+		int fit = 0;
+		return fit;
+
+	}
+
+	// get a string containing the gene value at the given index
+	public String getGene(int i) {
+		return genes[i].toString();
+	}
+
+	// set the gene value at the given index to the given value
+	public void setGene(int i, String val) {
+		if (val.equals("true")) {
+			genes[i] = true;
+		} else {
+			genes[i] = false;
+		}
+	}
+
+	// get the number of values in the member
+	public int getSize() {
+		return GENE_SIZE;
+	}
+
+	// takes the possible values and turns them into a "gene sequence"
+	private void generateGenes() {
+
+		// randomly assigns true or false to each bit value
+		for (int i = 0; i < GENE_SIZE; i++) {
+
+			int rand = ThreadLocalRandom.current().nextInt(0, 2);
+
+			if (rand == 1) {
+				genes[i] = true;
+			}
+		}
+	}
+	
+	@Override
+	public String toString(){
+		String ret = "";
+		if(genes[0] || genes[1]){
+			ret = ret + "The fly has wild type eyes\n";
+		}
+		else{
+			ret = ret + "The fly has mutant type eyes\n";
+		}
+		if(genes[2] || genes[3]){
+			ret = ret + "The fly has wild type body color\n";
+		}
+		else{
+			ret = ret + "The fly has mutant type body color\n";
+		}
+		if(genes[4] || genes[5]){
+			ret = ret + "The fly has wild type wings\n";
+		}
+		else{
+			ret = ret + "The fly has mutant type wings\n";
+		}
+		if(genes[6]){
+			ret = ret + "The fly is male\n";
+		}
+		else{
+			ret = ret + "The fly is female\n";
+		}
+		return ret;
+	}
+}

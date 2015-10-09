@@ -1,0 +1,40 @@
+
+import java.util.LinkedList;
+
+public class Member {
+	
+	private Boolean[] genes;
+	private LinkedList<String> vals;
+	private int goal;
+
+	// constructor for children
+	public Member() {
+
+	}
+
+	// constructor for new members
+	public Member(LinkedList<String> v, int g) {
+
+		this.vals = v;
+		this.goal = g;
+		genes = new Boolean[this.vals.size()];
+
+		// init the genes array to all false
+		Arrays.fill(genes, Boolean.FALSE);
+
+		// create the gene a random gene sequence for this member using the
+		// possible values
+		generateGenes();
+	}
+	
+	public String getGene(int i);
+	
+	public void setGene(int i, String val);
+	
+	public int getSize();
+	
+	public int getFitness();
+	
+	public LinkedList<String> getVals();
+	
+}

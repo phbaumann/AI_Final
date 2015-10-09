@@ -1,0 +1,11 @@
+import java.util.concurrent.ThreadLocalRandom;
+
+public class Algorithm {
+	// Initializing variables
+	private static final int GENSIZE = 100;
+	
+	public static int getGenSize() {
+		return GENSIZE;
+	}
+	
+}

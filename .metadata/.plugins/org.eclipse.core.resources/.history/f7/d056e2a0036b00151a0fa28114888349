@@ -1,0 +1,16 @@
+
+import java.util.LinkedList;
+
+public interface Member {
+	
+	public String getGene(int i);
+	
+	public void setGene(int i, String val);
+	
+	public int getSize();
+	
+	public int getFitness();
+	
+	public LinkedList<String> getVals();
+	
+}

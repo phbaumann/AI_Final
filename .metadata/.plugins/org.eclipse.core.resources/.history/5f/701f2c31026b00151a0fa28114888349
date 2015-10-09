@@ -1,0 +1,29 @@
+
+
+import java.util.LinkedList;
+import java.util.concurrent.ThreadLocalRandom;
+
+public class Algorithm_OLD {
+
+	//this should always be divisible by 5
+	private static final int GENSIZE = 48;
+	private static final int PREFSIZE = GENSIZE/3;
+	private static int PUZZNUM;
+	static int mutRand = 0;
+
+	public Algorithm_OLD(int puzz) {
+		PUZZNUM = puzz;
+	}
+
+	public static int getGenSize() {
+		return GENSIZE;
+	}
+	
+	public static void setPuzz(int puzz){
+		PUZZNUM = puzz;
+	}
+
+	
+
+
+}
