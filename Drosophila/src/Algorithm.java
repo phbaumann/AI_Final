@@ -1,5 +1,6 @@
 import java.util.concurrent.ThreadLocalRandom;
 
+// TEST TEST
 public class Algorithm {
 	// Initializing variables
 	private static final int GENSIZE = 100;
