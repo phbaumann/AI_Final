@@ -3,7 +3,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedList;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class Drosophila {
 
@@ -33,11 +32,11 @@ public class Drosophila {
 			e.printStackTrace();
 		}
 		
-		Population init = new Population(init.getSize());
+		Population init = new Population();
 		//probabilistically assign genotypes to flies
 		for(int i = 0 ; i < v.size(); i++){
 			Member m = new Member();
-			String[] phenos = v.get(i).split("\\t");
+			String[] phenos = split(v.get(i),"\\t");
 			//set the sex
 			if(phenos[0].equals("female")){
 				m.setGene(7,0);

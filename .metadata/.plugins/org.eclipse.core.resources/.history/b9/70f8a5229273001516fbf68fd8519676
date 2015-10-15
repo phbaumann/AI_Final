@@ -156,7 +156,7 @@ public class Member {
 				}
 			}
 		}
-	else { // if female
+	else (if this.getGene(0) = 1){ // if female
 			// 0 is white eye, 1 is red for female both need to
 			// be white eye
 		if (this.getGene(0) == 0 && this.getGene(1) == 0) {

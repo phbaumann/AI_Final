@@ -155,10 +155,9 @@ public class Member {
 					whiteEyes = true;
 				}
 			}
-		}
-	else { // if female
-			// 0 is white eye, 1 is red for female both need to
-			// be white eye
+		}else	{ // if female
+		// 0 is white eye, 1 is red for female both need to
+		// be white eye
 		if (this.getGene(0) == 0 && this.getGene(1) == 0) {
 			whiteEyes = true;
 		}
@@ -167,7 +166,6 @@ public class Member {
 	}
 
 	// returns the body color of the
-	
 	public String getBodyColor() {
 		int g_1 = genes[2];
 		int g_2 = genes[3];

@@ -62,7 +62,7 @@ public class Population {
 	//sum all fly fitnesses
 	public int getPopulationFitness(){
 		int fit = 0;
-		for(int i = 0; i < this.getSize(); i++){
+		for(int i =o; i < this.getSize(); i++){
 			fit += this.getMember(i).getFitness();
 		}
 		return fit;

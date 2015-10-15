@@ -14,7 +14,6 @@ public class Member {
 	private int life = 0;
 	private int[] goals;
 	private boolean bredEarly;
-	private int fit = 0;
 
 	// constructor for new members
 	// g is an array of booleans, indicating which phenotypes are desired
@@ -43,7 +42,7 @@ public class Member {
 
 		// find fitness for eye color
 		// if looking for white eyes
-		if (Drosophila.GOALS[0] == 0) {
+		if (Drosophila.GOALS[0] = 0) {
 
 		} // if looking for wild (Red) eyes
 		else {
@@ -155,8 +154,9 @@ public class Member {
 					whiteEyes = true;
 				}
 			}
-		}
-	else { // if female
+		}else
+
+	{ // if female
 			// 0 is white eye, 1 is red for female both need to
 			// be white eye
 		if (this.getGene(0) == 0 && this.getGene(1) == 0) {
@@ -167,7 +167,6 @@ public class Member {
 	}
 
 	// returns the body color of the
-	
 	public String getBodyColor() {
 		int g_1 = genes[2];
 		int g_2 = genes[3];
