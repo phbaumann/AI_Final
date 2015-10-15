@@ -176,7 +176,7 @@ public class Drosophila {
 		//TODO add how "days" the experiment runs, from cmd
 		int leng = 10;
 		int i = 0;
-		Population parents = new Population(init.getSize());
+		Population parents = new Population;
 		for(int j = 0; j < subPops.size(); j++){
 			
 			//grab the sub population

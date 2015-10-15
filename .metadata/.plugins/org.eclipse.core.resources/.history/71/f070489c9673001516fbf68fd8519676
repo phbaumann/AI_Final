@@ -113,7 +113,7 @@ public class Drosophila {
 		//add flies to a sortable list
 		Member[] sortedFlies = new Member[init.getSize()];
 		for(int i =0; i < init.getSize(); i++){
-			sortedFlies[i] = init.getMember(i);
+			sortedFlies.add(init.getMember(i));
 		}
 		
 		for (int i = 0; i < init.getSize(); i++) {
@@ -123,7 +123,7 @@ public class Drosophila {
 					max = j;
 				}
 			}
-			Member temp = sortedFlies[i];
+			Member temp = sortedFlies.get[i];
 			sortedFlies[i] = sortedFlies[max];
 			sortedFlies[max] = temp;
 		}
@@ -142,7 +142,7 @@ public class Drosophila {
 			
 			//make a list of the indexes of flies used, to prevent duplicates
 			LinkedList<Integer> numsUsed = new LinkedList<Integer>();
-			newPop.saveMember(sortedFlies[i]);
+			newPop.saveMemeber(sortedFlies.get(i));
 			// Grab one of the top flies
 			numsUsed.add(i);
 			while(numsUsed.size() < numFlies){
@@ -166,7 +166,7 @@ public class Drosophila {
 			
 		
 		//TODO change this to read from cmd
-		int[] GOALS = new int[3];
+		GOALS = int[3];
 		GOALS[0] = 0; //want white eyes
 		GOALS[1] = 1; //want ebony bodies
 		GOALS[2] = 1; // want wild wings
@@ -176,7 +176,7 @@ public class Drosophila {
 		//TODO add how "days" the experiment runs, from cmd
 		int leng = 10;
 		int i = 0;
-		Population parents = new Population(init.getSize());
+		
 		for(int j = 0; j < subPops.size(); j++){
 			
 			//grab the sub population

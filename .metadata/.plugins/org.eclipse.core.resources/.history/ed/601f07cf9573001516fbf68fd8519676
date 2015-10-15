@@ -164,7 +164,7 @@ public class Member {
 
 	}
 
-	// returns the body color of the fly
+	// returns the body color of the
 
 	public String getBodyColor() {
 		int g_1 = genes[2];

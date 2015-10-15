@@ -11,6 +11,8 @@ public class Drosophila {
 
 	public static void main(String[] args) {
 
+
+		//TODO read from cmd
 		String filename = "C://Desktop/flyData.txt";
 		LinkedList<String> v = new LinkedList<String>();
 		String line = null;
@@ -31,7 +33,7 @@ public class Drosophila {
 			e.printStackTrace();
 		}
 		
-		Population init = new Population(0);
+		Population init = new Population(init.getSize());
 		//probabilistically assign genotypes to flies
 		for(int i = 0 ; i < v.size(); i++){
 			Member m = new Member();
@@ -113,7 +115,7 @@ public class Drosophila {
 		//add flies to a sortable list
 		Member[] sortedFlies = new Member[init.getSize()];
 		for(int i =0; i < init.getSize(); i++){
-			sortedFlies[i] = init.getMember(i);
+			sortedFlies.add(init.getMember(i));
 		}
 		
 		for (int i = 0; i < init.getSize(); i++) {
@@ -123,16 +125,16 @@ public class Drosophila {
 					max = j;
 				}
 			}
-			Member temp = sortedFlies[i];
+			Member temp = sortedFlies.get[i];
 			sortedFlies[i] = sortedFlies[max];
 			sortedFlies[max] = temp;
 		}
 		
 		//number of subsets of parents to be made
-		int numPops = init.getSize()/10;
+		int numPops = init.size()/10;
 		for(int i = 0; i < numPops; i++){
 			
-			Population newPop = new Population(init.getSize());
+			Population newPop = new Population();
 			
 			//number of flies to be put in this subset
 			int numFlies = ThreadLocalRandom.current().nextInt(6, 11);
@@ -142,7 +144,7 @@ public class Drosophila {
 			
 			//make a list of the indexes of flies used, to prevent duplicates
 			LinkedList<Integer> numsUsed = new LinkedList<Integer>();
-			newPop.saveMember(sortedFlies[i]);
+			newPop.saveMemeber(sortedFlies(i));
 			// Grab one of the top flies
 			numsUsed.add(i);
 			while(numsUsed.size() < numFlies){
@@ -166,7 +168,7 @@ public class Drosophila {
 			
 		
 		//TODO change this to read from cmd
-		int[] GOALS = new int[3];
+		GOALS = int[3];
 		GOALS[0] = 0; //want white eyes
 		GOALS[1] = 1; //want ebony bodies
 		GOALS[2] = 1; // want wild wings
@@ -176,7 +178,7 @@ public class Drosophila {
 		//TODO add how "days" the experiment runs, from cmd
 		int leng = 10;
 		int i = 0;
-		Population parents = new Population(init.getSize());
+		
 		for(int j = 0; j < subPops.size(); j++){
 			
 			//grab the sub population
