@@ -5,32 +5,88 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Member {
 
-	//genes 01 - eye color
-	//genes 23 - body color
-	//genes 45 - wings
-	//genes 6 - sex
+	// genes 01 - eye color
+	// genes 23 - body color
+	// genes 45 - wings
+	// genes 67 - sex
 	private int[] genes;
-	private final int GENE_SIZE = 7;
-
+	private final int GENE_SIZE = 8;
+	private int life = 0;
+	private int[] goals;
+	private boolean bredEarly;
 
 	// constructor for new members
-	public Member() {
+	// g is an array of booleans, indicating which phenotypes are desired
+	// g[0] is eye color, g[1] is body color, g[2] is wing type
+	// true is mutant, false is wild
+	public Member(int[] g) {
 
 		genes = new int[GENE_SIZE];
+		this.goals = g;
+
+		this.life = ThreadLocalRandom.current().nextInt(1, 5);
 
 		// init the genes array to all false
-		Arrays.fill(genes, 0);
-
-		// create the gene a random gene sequence for this member using the
-		// possible values
-		generateGenes();
+		Arrays.fill(genes, 1);
+		bredEarly = false;
 	}
-
 
 	// get the fitness of the individual
 	// for puzzle 1, the fitness is the sum of the numbers
 	public int getFitness() {
-		int fit = 0;
+
+		// please dont use dead flies
+		if (this.life == 0) {
+			return -1;
+		}
+
+		// find fitness for eye color
+		// if looking for white eyes
+		if (Drosophila.GOALS[0] = 0) {
+
+		} // if looking for wild (Red) eyes
+		else {
+
+		}
+
+		// find fitness for body type
+		// if looking for yellow body, super recessive
+		if (Drosophila.GOALS[1] == 0) {
+			if (this.getBodyColor().equals("yellow")) {
+				fit += 10;
+			}
+		}
+		// if looking for ebony, middle recessive
+		else if (Drosophila.GOALS[1] == 1) {
+			if (this.getBodyColor().equals("ebony")) {
+				fit += 10;
+			}
+			// yellow flies are better than wild if looking for ebony
+			else if (this.getBodyColor().equals("yellow")) {
+				fit += 5;
+			}
+		}
+		// if looking for wild, dominant
+		else {
+			if (this.getBodyColor().equals("wild")) {
+				fit += 10;
+			}
+		}
+
+		// find fitness for wings
+		// wings
+		if (Drosophila.GOALS[2] == 0) {
+			if (this.getWingType().equals("apterous")) {
+				fit += 10;
+			}
+		}
+		// no wings
+		else {
+			if (this.getWingType().equals("wild")) {
+				fit += 10;
+			}
+		}
+
 		return fit;
 
 	}
@@ -50,45 +106,118 @@ public class Member {
 		return GENE_SIZE;
 	}
 
-	// takes the possible values and turns them into a "gene sequence"
-	private void generateGenes() {
+	// return how many gens can this fly be used for
+	public int getLife() {
+		return this.life;
+	}
 
-		// randomly assigns true or false to each bit value
-		for (int i = 0; i < GENE_SIZE; i++) {
+	// decrement the life counters
+	public void useLife() {
+		this.life--;
+	}
 
-			int rand = ThreadLocalRandom.current().nextInt(0, 2);
-			genes[i] = rand;
-			
+	// returns true if the fly bred early
+	public boolean bredEarly() {
+		return bredEarly;
+	}
+
+	// indicates that this fly bread before isolation
+	public void setBredEarly() {
+		this.bredEarly = true;
+	}
+
+	// // takes the possible values and turns them into a "gene sequence"
+	// private void generateGenes() {
+	//
+	// // randomly assigns true or false to each bit value
+	// for (int i = 0; i < GENE_SIZE; i++) {
+	// if (i == 2 || i == 3) {
+	// int rand = ThreadLocalRandom.current().nextInt(0, 3);
+	// } else {
+	// int rand = ThreadLocalRandom.current().nextInt(0, 2);
+	// }
+	// genes[i] = rand;
+	//
+	// }
+	// }
+
+	// returns true if the member has the correct alleles for white eyes
+	public boolean hasWhiteEyes() {
+		boolean whiteEyes = false;
+		if (this.getGene(6) == 1 ) { // if male
+			if (this.getGene(0) == 0) {
+				whiteEyes = true;
+			}
+		}
+			else if (this.getGene(7) == 1 ){
+				if(this.getGene(1) == 0){
+					whiteEyes = true;
+				}
+			}
+		}else
+
+	{ // if female
+			// 0 is white eye, 1 is red for female both need to
+			// be white eye
+		if (this.getGene(0) == 0 && this.getGene(1) == 0) {
+			whiteEyes = true;
+		}
+	} return whiteEyes;
+
+	}
+
+	// returns the body color of the
+	public String getBodyColor() {
+		int g_1 = genes[2];
+		int g_2 = genes[3];
+		if (g_1 == 2 || g_2 == 2) {
+			// wild body color
+			return "wild";
+		} else {
+			if (g_1 == 1 || g_2 == 1) {
+				// ebony body color
+				return "ebony";
+			} else {
+				// yellow body color
+				return "yellow";
+			}
 		}
 	}
-	
-	@Override
-	public String toString(){
-		String ret = "";
-		if(genes[0] + genes[1] >= 1){
-			ret = ret + "The fly has wild type eyes\n";
+
+	// returns the sex of the fly
+	public String getSex() {
+		if (genes[6] == 0 && genes[7] == 0) {
+			return "female";
+		} else {
+			return "male";
 		}
-		else{
+	}
+
+	// returns whether or not the fly has wings
+	public String getWingType() {
+		if (genes[4] == 1 || genes[5] == 1) {
+			return "wild";
+		} else {
+			return "apterous";
+		}
+	}
+
+	@Override
+	public String toString() {
+		String ret = "";
+
+		ret = ret + "The fly is " + getSex() + "\n";
+		if (this.hasWhiteEyes()) {
+			ret = ret + "The fly has wild type eyes\n";
+		} else {
 			ret = ret + "The fly has mutant type eyes\n";
 		}
-		if(genes[2] + genes[3] >= 1){
-			ret = ret + "The fly has wild type body color\n";
-		}
-		else{
-			ret = ret + "The fly has mutant type body color\n";
-		}
-		if(genes[4] + genes[5] >= 1){
-			ret = ret + "The fly has wild type wings\n";
-		}
-		else{
-			ret = ret + "The fly has mutant type wings\n";
-		}
-		if(genes[6] == 1){
-			ret = ret + "The fly is male\n";
-		}
-		else{
-			ret = ret + "The fly is female\n";
-		}
+
+		ret = ret + "The fly has " + getBodyColor() + " body color\n";
+
+		ret = ret + "The fly has " + getWingType() + " type wings\n";
+
 		return ret;
 	}
+
 }

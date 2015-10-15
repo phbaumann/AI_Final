@@ -7,16 +7,17 @@ public class Population {
 
 	public Population(int size) {
 		members = new LinkedList<Member>();
+		
 
 		// make the list of members
 		for (int i = 0; i < size; i++) {
-			Member newMember = new Member();
+			Member newMember = new Member(goals);
 			members.add(newMember);
 		}
 	}
 	
 	// second constructor for non-initial populations
-	public Population() {
+	public Population(int[] g) {
 		this.members = new LinkedList<Member>();
 	}
 	
@@ -24,6 +25,7 @@ public class Population {
 	public Member getMember(int i) {
 		return members.get(i);
 	}
+	
 
 	// removes the member at the given index
 	public void removeMember(int i) {
@@ -54,6 +56,16 @@ public class Population {
 			}
 		}
 		return members.get(bestInd);
+	}
+	
+	
+	//sum all fly fitnesses
+	public int getPopulationFitness(){
+		int fit = 0;
+		for(int i =o; i < this.getSize(); i++){
+			fit += this.getMember(i).getFitness();
+		}
+		return fit;
 	}
 
 
