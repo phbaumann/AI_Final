@@ -11,7 +11,7 @@ public class Drosophila {
 
 	public static void main(String[] args) {
 
-
+		
 		//TODO read from cmd
 		String filename = "C://Desktop/flyData.txt";
 		LinkedList<String> v = new LinkedList<String>();
