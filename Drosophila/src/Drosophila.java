@@ -9,12 +9,12 @@ public class Drosophila {
 
 	public static int[] GOALS;
 	// Needs to be run in order of jar datafile "target_fly" numDays
-	// Example: ./Drosophila.jar "male wild wild wild" 5
+	// Example: java -jar drosophila.jar filename "eyes body wings" 5
 	public static void main(String[] args) {
 
-		String filename = args[1];
-		String goalFly = args[2];
-		int numDays = Integer.parseInt(args[3]);
+		String filename = args[0];
+		String goalFly = args[1];
+		int numDays = Integer.parseInt(args[2]);
 		
 		LinkedList<String> v = new LinkedList<String>();
 		String line = null;
@@ -134,6 +134,10 @@ public class Drosophila {
 		
 		//number of subsets of parents to be made
 		int numPops = init.getSize()/10;
+		// Makes two populations (male and female) for crossing over
+		Population malePop = new Population();
+		Population femPop = new Population();
+		
 		for(int i = 0; i < numPops; i++){
 			
 			Population newPop = new Population(init.getSize());
@@ -149,9 +153,7 @@ public class Drosophila {
 			newPop.saveMember(sortedFlies[i]);
 			// Grab one of the top flies
 			numsUsed.add(i);
-			// Makes two populations (male and female) for crossing over
-			Population malePop = new Population(maxGend);
-			Population femPop = new Population(maxGend);
+
 				
 			while(numsUsed.size() < numFlies){
 				int fly = ThreadLocalRandom.current().nextInt(0, init.getSize());
@@ -164,7 +166,7 @@ public class Drosophila {
 					}
 					else if(sortedFlies[fly].getSex().equals("male") && numMales < maxGend){
 						newPop.saveMember(sortedFlies[fly]);
-						femPop.saveMember(sortedFlies[fly]);
+						malePop.saveMember(sortedFlies[fly]);
 						numMales++;
 						numsUsed.add(fly);
 					}
@@ -173,44 +175,96 @@ public class Drosophila {
 			}
 			subPops.add(newPop);
 		}
-			
+
+	
+
 		
-		//TODO change this to read from cmd
-		int[] GOALS = new int[3];
-		GOALS[0] = 0; //want white eyes
-		GOALS[1] = 1; //want ebony bodies
-		GOALS[2] = 1; // want wild wings
+		int quit = 0;
+		// Collects parts of goal fly
+		String[] goal = goalFly.split("\\s");
+		GOALS = new int[3];
+		
+		// Determine goal eye color
+		if (goal[0].equals("white")) {
+			GOALS[0] = 0;
+		}
+		else if (goal[0].equals("wild")) {
+			GOALS[0] = 1;
+		}
+		else {
+			System.out.println("Invalid eye request");
+			quit = 1;
+		}
+		
+		// Determine goal body color
+		if (goal[1].equals("yellow")) {
+			GOALS[1] = 0;
+		}
+		else if (goal[1].equals("ebony")) {
+			GOALS[1] = 1;
+		}
+		else if (goal[1].equals("wild")) {
+			GOALS[1] = 2;
+		}
+		else {
+			System.out.println("Invalid body request");
+			quit = 1;
+		}
+		
+		// Determine goal wings
+		if (goal[2].equals("apterous")) {
+			GOALS[2] = 0;
+		}
+		else if (goal[2].equals("wild")) {
+			GOALS[2] = 1;
+		}
+		else {
+			System.out.println("Invalid wing request");
+			quit = 1;
+		}
+		if (quit == 1) {
+			return;
+		}
 		
 		Population best = subPops.get(0);
 		
-		//TODO add how "days" the experiment runs, from cmd
-		int leng = 10;
 		int i = 0;
 		Population parents = new Population(init.getSize());
 		for(int j = 0; j < subPops.size(); j++){
 			
 			//grab the sub population
 			parents = subPops.get(j);
-			while(i < leng){
-				Population children = Algorithm.makeBabies(parents);
+			while(i < numDays){
+				Population children = Algorithm.makeBabies(malePop,femPop);
 				
 				//decrement the life counter of each fly in parents
-				for(int i = 0; i < parents.getSize();i++){
-					parents.getMember(i).useLife();
+				for(int k = 0; k < parents.getSize();k++){
+					parents.getMember(k).useLife();
 				}
-				//TODO fill out parent selection in Algorithm class
-				parents = Algorithm.parentSelection(parents,babies);
+				
+				int radiation = ThreadLocalRandom.current().nextInt(0,20);
+				for (int r = 0; r < 10; r ++) {
+					if(radiation == 19) {
+						int randMut = ThreadLocalRandom.current().nextInt(0,parents.getSize());
+						Algorithm.mutate(parents.getMember(randMut),ThreadLocalRandom.current().nextInt(0,4));
+						radiation = ThreadLocalRandom.current().nextInt(0,20);
+					}
+					else {
+						break;
+					}
+				}
+				parents = Algorithm.parentSelection(parents,children);
 				i++;
 			}
 			
 			if(parents.getPopulationFitness() > best.getPopulationFitness()){
 				best = parents;
+				System.out.println("Best was :"+best);
 			}
 		}
 		
 		System.out.println("The best:\n");
-		System.out.println(best);
+		System.out.println(best.toString());
 
 	}
-
 }

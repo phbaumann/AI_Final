@@ -1,0 +1,227 @@
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.concurrent.ThreadLocalRandom;
+
+public class Drosophila {
+
+	public static int[] GOALS;
+	// Needs to be run in order of jar datafile "target_fly" numDays
+	// Example: ./Drosophila.jar "eyes body wings" 5
+	public static void main(String[] args) {
+
+		String filename = args[1];
+		String goalFly = args[2];
+		int numDays = Integer.parseInt(args[3]);
+		
+		LinkedList<String> v = new LinkedList<String>();
+		String line = null;
+		
+		try{
+			FileReader fileReader = new FileReader(filename);
+			BufferedReader buffReader = new BufferedReader(fileReader);
+			
+			while((line = buffReader.readLine())!= null){
+				v.add(line);
+			}
+			
+			buffReader.close();
+		}
+		catch(FileNotFoundException ex){
+			System.out.println("File doesnt exist");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		Population init = new Population(0);
+		//probabilistically assign genotypes to flies
+		for(int i = 0 ; i < v.size(); i++){
+			Member m = new Member();
+			String[] phenos = v.get(i).split("\\t");
+			//set the sex
+			if(phenos[0].equals("female")){
+				m.setGene(7,0);
+				m.setGene(6,0);
+			}
+			else{
+				m.setGene(6,0);
+			}
+			
+			//set eye color geno types
+			if(phenos[1].equals("white")){
+				m.setGene(0,0);
+				m.setGene(1,0);
+			}
+			else{
+				//7/15 will be AA, 8/15 will be Aa
+				int prob = ThreadLocalRandom.current().nextInt(1, 16);
+				if(prob > 7){
+					m.setGene(0,0);
+				}
+			}
+			
+			//set body color genotypes
+			if(phenos[2].equals("yellow")){
+				m.setGene(2,0);
+				m.setGene(3,0);
+			}
+			else if(phenos[2].equals("ebony")){
+				int prob = ThreadLocalRandom.current().nextInt(1, 29);
+				if(prob > 13){
+					m.setGene(3,0);
+				}
+			}
+			else{
+				int prob = ThreadLocalRandom.current().nextInt(1, 46);
+				//34 flies will be hybrid
+				if(prob > 11){
+					int prob2 = ThreadLocalRandom.current().nextInt(0,2);
+					//half will be Ab and half will be Aa
+					if(prob2 == 0){
+						m.setGene(3,2);
+					}
+					else{
+						m.setGene(3,2);
+						m.setGene(2,0);
+					}
+					
+				}
+				//11 out of 45 flies will be AA
+				else{
+					m.setGene(3,2);
+					m.setGene(2,2);
+				}
+			}
+			
+			
+			//set wing geno types
+			if(phenos[3].equals("apterous")){
+				m.setGene(0,0);
+				m.setGene(1,0);
+			}
+			else{
+				//7/15 will be AA, 8/15 will be Aa
+				int prob = ThreadLocalRandom.current().nextInt(1, 16);
+				if(prob > 7){
+					m.setGene(0,0);
+				}
+			}
+			
+			init.saveMember(m);
+		}
+		
+		LinkedList<Population> subPops = new LinkedList<Population>();
+		
+		//add flies to a sortable list
+		Member[] sortedFlies = new Member[init.getSize()];
+		for(int i =0; i < init.getSize(); i++){
+			sortedFlies[i] = init.getMember(i);
+		}
+		
+		for (int i = 0; i < init.getSize(); i++) {
+			int max = i;
+			for (int j = i + 1; j > init.getSize(); j++) {
+				if (sortedFlies[j].getFitness() > sortedFlies[max].getFitness()) {
+					max = j;
+				}
+			}
+			Member temp = sortedFlies[i];
+			sortedFlies[i] = sortedFlies[max];
+			sortedFlies[max] = temp;
+		}
+		
+		//number of subsets of parents to be made
+		int numPops = init.getSize()/10;
+		// Makes two populations (male and female) for crossing over
+		Population malePop = new Population();
+		Population femPop = new Population();
+		
+		for(int i = 0; i < numPops; i++){
+			
+			Population newPop = new Population(init.getSize());
+			
+			//number of flies to be put in this subset
+			int numFlies = ThreadLocalRandom.current().nextInt(6, 11);
+			int maxGend = (numFlies/2)+1;
+			int numMales = 0;
+			int numFemales = 0;
+			
+			//make a list of the indexes of flies used, to prevent duplicates
+			LinkedList<Integer> numsUsed = new LinkedList<Integer>();
+			newPop.saveMember(sortedFlies[i]);
+			// Grab one of the top flies
+			numsUsed.add(i);
+
+				
+			while(numsUsed.size() < numFlies){
+				int fly = ThreadLocalRandom.current().nextInt(0, init.getSize());
+				if(!numsUsed.contains(fly)){
+					if(sortedFlies[fly].getSex().equals("female") && numFemales < maxGend){
+						newPop.saveMember(sortedFlies[fly]);
+						femPop.saveMember(sortedFlies[fly]);
+						numFemales++;
+						numsUsed.add(fly);
+					}
+					else if(sortedFlies[fly].getSex().equals("male") && numMales < maxGend){
+						newPop.saveMember(sortedFlies[fly]);
+						malePop.saveMember(sortedFlies[fly]);
+						numMales++;
+						numsUsed.add(fly);
+					}
+				}
+				
+			}
+			subPops.add(newPop);
+		}
+			
+		goalFly;
+		//TODO change this to read from cmd
+		int[] GOALS = new int[3];
+		GOALS[0] = 0; //want white eyes
+		GOALS[1] = 1; //want ebony bodies
+		GOALS[2] = 1; // want wild wings
+		
+		Population best = subPops.get(0);
+		
+		int i = 0;
+		Population parents = new Population(init.getSize());
+		for(int j = 0; j < subPops.size(); j++){
+			
+			//grab the sub population
+			parents = subPops.get(j);
+			while(i < numDays){
+				Population children = Algorithm.makeBabies(malePop,femPop);
+				
+				//decrement the life counter of each fly in parents
+				for(int k = 0; k < parents.getSize();k++){
+					parents.getMember(k).useLife();
+				}
+				//TODO fill out parent selection in Algorithm class
+				int radiation = ThreadLocalRandom.current().nextInt(0,20);
+				for (int r = 0; r < 10; r ++) {
+					if(radiation == 19) {
+						int randMut = ThreadLocalRandom.current().nextInt(0,parents.getSize());
+						Algorithm.mutate(parents.getMember(randMut),ThreadLocalRandom.current().nextInt(0,4));
+						radiation = ThreadLocalRandom.current().nextInt(0,20);
+					}
+					else {
+						break;
+					}
+				}
+				parents = Algorithm.parentSelection(parents,children);
+				i++;
+			}
+			
+			if(parents.getPopulationFitness() > best.getPopulationFitness()){
+				best = parents;
+			}
+		}
+		
+		System.out.println("The best:\n");
+		System.out.println(best);
+
+	}
+
+}

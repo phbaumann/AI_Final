@@ -1,3 +1,4 @@
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 // TEST TEST
@@ -10,15 +11,24 @@ public class Algorithm {
 	// make a new population
 	public static Population parentSelection(Population pop1, Population pop2) {
 
-		Population parentPop = new Population();
-		return parentPop;
+		Population parentPop = new Population(pop1.members);
+		parentPop.members.addAll(pop2.members);
+		Population best = new Population();
+		for(int i=0; i<10; i++){
+			Member bestMember = parentPop.getFittest();
+			best.saveMember(bestMember);
+			int index = parentPop.indexOf(bestMember);
+			parentPop.removeMember(index);
+		}
+		return best;
+		
 	}
 
 	// grab some random children to indicate which children breed before being
 	// isolated
 	public static Population naturalSelection(Population children) {
-		Random.chance = new Random();
-		int inbred = int((chance.nextGaussian() + 1) * children.getSize / 6);
+		Random chance = new Random();
+		int inbred = (int) ((chance.nextGaussian() + 1) * children.getSize() / 6);
 		Population heathens = children;
 		
 		//sets a number of flies to have bred early
@@ -67,7 +77,7 @@ public class Algorithm {
 	}
 
 	// makes a new population using crossover function
-	private static Population makeBabies(Population males, Population females) {
+	public static Population makeBabies(Population males, Population females) {
 		Population newPop = new Population();
 
 		Member male;
@@ -82,7 +92,7 @@ public class Algorithm {
 			// make the babies! and add them to the new population
 			int size = ThreadLocalRandom.current().nextInt(7, 11);
 			for (int j = 0; j < size; j++) {
-				Member newMem = crossover(mem1, mem2);
+				Member newMem = crossover(male, females.getMember(i));
 				newPop.saveMember(newMem);
 			}
 		}
@@ -135,19 +145,29 @@ public class Algorithm {
 	}
 
 	// mutates the given fly, mutates the genotype associated with the input int
-	private static Member mutate(Member mem, int type) {
-		Member mutMem = mem;
+	public static void mutate(Member mem, int type) {
+		int rand = ThreadLocalRandom.current().nextInt(0, 2);
 		switch (type) {
-		case BODY:
+		case 0:   //body mutation
+			int rand2 = ThreadLocalRandom.current().nextInt(1, 3);
+			if (rand2 == mem.getGene(rand+2)) {
+				rand2 = ThreadLocalRandom.current().nextInt(1, 3);
+			}
+			mem.setGene(rand+2, rand2);
 			break;
-		case LIFE:
-			mutMem.loseLife();
+		case 1:   //eye mutation
+			mem.setGene(rand, Math.abs(mem.getGene(rand)-1));
+			break;
+		case 2:   //wing mutation
+			mem.setGene(rand+4, Math.abs(mem.getGene(rand+4)-1));
+			break;
+		case 3:   //life mutation
+			mem.useLife();
 			break;
 		default:
 			break;
 		}
 
-		return mutMem;
 	}
 
 }

@@ -1,6 +1,5 @@
 
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Member {
@@ -12,7 +11,6 @@ public class Member {
 	private int[] genes;
 	private final int GENE_SIZE = 8;
 	private int life = 0;
-	private int[] goals;
 	private boolean bredEarly;
 	private int fit = 0;
 
@@ -20,10 +18,9 @@ public class Member {
 	// g is an array of booleans, indicating which phenotypes are desired
 	// g[0] is eye color, g[1] is body color, g[2] is wing type
 	// true is mutant, false is wild
-	public Member(int[] g) {
+	public Member() {
 
 		genes = new int[GENE_SIZE];
-		this.goals = g;
 
 		this.life = ThreadLocalRandom.current().nextInt(1, 5);
 
@@ -44,10 +41,25 @@ public class Member {
 		// find fitness for eye color
 		// if looking for white eyes
 		if (Drosophila.GOALS[0] == 0) {
-
+			if(this.hasWhiteEyes()){
+				this.fit += 10;
+				if(this.getSex().equals("female")) {
+					this.fit += 5;
+				}
+			}
 		} // if looking for wild (Red) eyes
 		else {
-
+			if(!this.hasWhiteEyes()){
+				this.fit += 10;
+				if(this.getSex().equals("male")) {
+					this.fit += 5;
+				}
+			}
+			else {
+				if(this.getSex().equals("female")) {
+					this.fit -= 10;
+				}
+			}
 		}
 
 		// find fitness for body type
@@ -56,15 +68,18 @@ public class Member {
 			if (this.getBodyColor().equals("yellow")) {
 				fit += 10;
 			}
+			if (this.getBodyColor().equals("wild")) {
+				this.fit -= 10;
+			}
 		}
 		// if looking for ebony, middle recessive
 		else if (Drosophila.GOALS[1] == 1) {
 			if (this.getBodyColor().equals("ebony")) {
-				fit += 10;
+				this.fit += 10;
 			}
 			// yellow flies are better than wild if looking for ebony
-			else if (this.getBodyColor().equals("yellow")) {
-				fit += 5;
+			else if (this.getBodyColor().equals("wild")) {
+				this.fit -= 10;
 			}
 		}
 		// if looking for wild, dominant
