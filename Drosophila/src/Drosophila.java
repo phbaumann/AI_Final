@@ -113,6 +113,8 @@ public class Drosophila {
 		}
 		
 		LinkedList<Population> subPops = new LinkedList<Population>();
+//		LinkedList<Population> maleSubPops = new LinkedList<Population>();
+//		LinkedList<Population> femaleSubPops = new LinkedList<Population>();
 		
 		//add flies to a sortable list
 		Member[] sortedFlies = new Member[init.getSize()];
@@ -140,7 +142,7 @@ public class Drosophila {
 		
 		for(int i = 0; i < numPops; i++){
 			
-			Population newPop = new Population(init.getSize());
+			Population newPop = new Population();
 			
 			//number of flies to be put in this subset
 			int numFlies = ThreadLocalRandom.current().nextInt(6, 11);
@@ -226,10 +228,10 @@ public class Drosophila {
 			return;
 		}
 		
-		Population best = subPops.get(0);
+		Population best = new Population();
 		
 		int i = 0;
-		Population parents = new Population(init.getSize());
+		Population parents = new Population();
 		for(int j = 0; j < subPops.size(); j++){
 			
 			//grab the sub population
@@ -255,16 +257,19 @@ public class Drosophila {
 				}
 				parents = Algorithm.parentSelection(parents,children);
 				i++;
+				System.out.println("Cycling \n");
 			}
 			
 			if(parents.getPopulationFitness() > best.getPopulationFitness()){
 				best = parents;
-				System.out.println("Best was :"+best);
-			}
+				}
+			System.out.println("best size:"+best.getSize()+"\nparents size:"+parents.getSize());
+
 		}
 		
 		System.out.println("The best:\n");
 		System.out.println(best.toString());
-
+		System.out.println("The best population fitness score was ");
+		System.out.println("" + best.getPopulationFitness() + "\n");
 	}
 }

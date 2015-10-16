@@ -12,14 +12,84 @@ public class Algorithm {
 	public static Population parentSelection(Population pop1, Population pop2) {
 
 		Population parentPop = new Population(pop1.members);
+		System.out.println(parentPop.toString());
 		parentPop.members.addAll(pop2.members);
+		System.out.println(parentPop.toString());
 		Population best = new Population();
-		for(int i=0; i<10; i++){
+		int popSize = parentPop.getSize();
+		int minDad = ((popSize/2)-1);
+		int maxDad = ((popSize/2)+1);
+		System.out.println("min: " + minDad + "max: " + maxDad + "popSize: " + popSize);
+		int totDads = 5;
+		//int totDads = popsize;
+		int totMoms = 5;
+		int numDads = 0;
+		int numMoms = 0;
+		int i = 0;
+		int index;
+		while(i < 10){
+			if (parentPop.getSize() < 1) {
+				System.out.println("Empty parent Population\n");
+				break;
+			}
 			Member bestMember = parentPop.getFittest();
-			best.saveMember(bestMember);
-			int index = parentPop.indexOf(bestMember);
-			parentPop.removeMember(index);
+			if (numDads > totDads && bestMember.getSex().equals("male")) {
+				parentPop.removeMember(parentPop.indexOf(bestMember));
+				continue;
+			}
+			if (numMoms > totMoms && bestMember.getSex().equals("female")) {
+				parentPop.removeMember(parentPop.indexOf(bestMember));
+				continue;
+			}
+			
+			else {
+				if(bestMember.getSex().equals("male")){
+				numDads++;
+				}
+			else{
+				numMoms++;
+			}
+			//TODO WHen running, will save female as female, but then when a male is added 
+			//will change sexes of all in array to male. How to fix??????????
+			
+//			if(bestMember.getSex().equals("male") && numDads > totDads){
+//				bestMember.setGene(7, 0);
+//				bestMember.setGene(6, 0);
+//				best.saveMember(bestMember);
+//				index = parentPop.indexOf(bestMember);
+//				parentPop.removeMember(index);
+//				i++;
+//				System.out.println("is now male trans");
+//				System.out.println("bestsssssss: " + best.toString());
+//			}
+			if (bestMember.getSex().equals("male") && numDads <= totDads){
+				best.saveMember(bestMember);
+				index = parentPop.indexOf(bestMember);
+				parentPop.removeMember(index);
+				i++;
+				System.out.println("good dads");
+				System.out.println("bestsssssss: " + best.toString());
+			}
+			if(bestMember.getSex().equals("female") && numMoms <= totMoms){
+				best.saveMember(bestMember);
+				index = parentPop.indexOf(bestMember);
+				parentPop.removeMember(index);
+				i++;
+				System.out.println("good moms");
+				System.out.println("bestsssssss: " + best.toString());
+			}
+//			if(bestMember.getSex().equals("female") && numMoms > totMoms){
+//				bestMember.setGene(7, 1);
+//				best.saveMember(bestMember);
+//				index = parentPop.indexOf(bestMember);
+//				parentPop.removeMember(index);
+//				i++;
+//				System.out.println("is now trans");
+//				System.out.println("bestsssssss: " + best.toString());
+//			}
 		}
+	}
+		System.out.println("bestsssssss: " + best.toString());
 		return best;
 		
 	}
