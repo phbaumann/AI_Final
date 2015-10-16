@@ -8,14 +8,10 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Drosophila {
 
 	public static int[] GOALS;
-	// Needs to be run in order of jar datafile "target_fly" numDays
-	// Example: ./Drosophila.jar "male wild wild wild" 5
+	// Needs to be run in order of jar datafile 
 	public static void main(String[] args) {
 
-		String filename = args[1];
-		String goalFly = args[2];
-		int numDays = Integer.parseInt(args[3]);
-		
+		String filename = "C://Desktop/flyData.txt";
 		LinkedList<String> v = new LinkedList<String>();
 		String line = null;
 		
@@ -196,7 +192,7 @@ public class Drosophila {
 				
 				//decrement the life counter of each fly in parents
 				for(int i = 0; i < parents.getSize();i++){
-					parents.getMember(i).useLife();
+					parents.getMember(i).loseLife();
 				}
 				//TODO fill out parent selection in Algorithm class
 				parents = Algorithm.parentSelection(parents,babies);

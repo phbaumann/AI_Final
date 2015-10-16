@@ -127,6 +127,21 @@ public class Member {
 		this.bredEarly = true;
 	}
 
+	// // takes the possible values and turns them into a "gene sequence"
+	// private void generateGenes() {
+	//
+	// // randomly assigns true or false to each bit value
+	// for (int i = 0; i < GENE_SIZE; i++) {
+	// if (i == 2 || i == 3) {
+	// int rand = ThreadLocalRandom.current().nextInt(0, 3);
+	// } else {
+	// int rand = ThreadLocalRandom.current().nextInt(0, 2);
+	// }
+	// genes[i] = rand;
+	//
+	// }
+	// }
+
 	// returns true if the member has the correct alleles for white eyes
 	public boolean hasWhiteEyes() {
 		boolean whiteEyes = false;

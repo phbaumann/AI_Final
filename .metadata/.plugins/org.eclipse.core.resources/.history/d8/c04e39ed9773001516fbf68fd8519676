@@ -8,14 +8,10 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Drosophila {
 
 	public static int[] GOALS;
-	// Needs to be run in order of jar datafile "target_fly" numDays
-	// Example: ./Drosophila.jar "male wild wild wild" 5
+
 	public static void main(String[] args) {
 
-		String filename = args[1];
-		String goalFly = args[2];
-		int numDays = Integer.parseInt(args[3]);
-		
+		String filename = "C://Desktop/flyData.txt";
 		LinkedList<String> v = new LinkedList<String>();
 		String line = null;
 		
@@ -149,22 +145,17 @@ public class Drosophila {
 			newPop.saveMember(sortedFlies[i]);
 			// Grab one of the top flies
 			numsUsed.add(i);
-			// Makes two populations (male and female) for crossing over
-			Population malePop = new Population(maxGend);
-			Population femPop = new Population(maxGend);
-				
+			Population malePop = new Population();
 			while(numsUsed.size() < numFlies){
 				int fly = ThreadLocalRandom.current().nextInt(0, init.getSize());
 				if(!numsUsed.contains(fly)){
 					if(sortedFlies[fly].getSex().equals("female") && numFemales < maxGend){
 						newPop.saveMember(sortedFlies[fly]);
-						femPop.saveMember(sortedFlies[fly]);
 						numFemales++;
 						numsUsed.add(fly);
 					}
 					else if(sortedFlies[fly].getSex().equals("male") && numMales < maxGend){
 						newPop.saveMember(sortedFlies[fly]);
-						femPop.saveMember(sortedFlies[fly]);
 						numMales++;
 						numsUsed.add(fly);
 					}
@@ -196,7 +187,7 @@ public class Drosophila {
 				
 				//decrement the life counter of each fly in parents
 				for(int i = 0; i < parents.getSize();i++){
-					parents.getMember(i).useLife();
+					parents.getMember(i).loseLife();
 				}
 				//TODO fill out parent selection in Algorithm class
 				parents = Algorithm.parentSelection(parents,babies);
